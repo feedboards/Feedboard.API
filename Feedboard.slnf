@@ -1,0 +1,10 @@
+{
+  "solution": {
+    "path": "Feedboard.sln",
+    "projects": [
+      "Feedboard.API\\Feedboard.API.csproj",
+      "Feedboard.Core\\Feedboard.Core.csproj",
+      "Feedboard.DAL\\Feedboard.DAL.csproj"
+    ]
+  }
+}

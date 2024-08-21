@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  feedboard-api:
+    build:
+      context: .
+      dockerfile: ./Infrastructure/API/Dockerfile
+    container_name: feedboard-api
+    environment:
+      - GITHUB_CLIENT_ID=O
+      - GITHUB_CLIENT_SECRET=
+
+      - AZURE_CLIENT_ID=
+      - AZURE_TENANT_ID=
+      - AZURE_CLIENT_SECRET=
+
+      - DATABASE_HOST=
+      - DATABASE_PORT= (optional)
+      - DATABASE_USERNANE=
+      - DATABASE_PASSWORD=
+      - DATABASE_DATABASE_NAME=
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - feedboard-network
+    depends_on:
+      - feedboard-database-mssql
+
+  feedboard-database-mssql:
+    build:
+      context: .
+      dockerfile: /Infrastructure/Database/Dockerfile
+    container_name: feedboard-database-mssql
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ""
+      DATABASE_NAME: ""
+    ports:
+      - "1433:1433"
+    volumes:
+      - database_data:/var/opt/mssql
+    networks:
+      - feedboard-network
+
+networks:
+  feedboard-network:
+
+
+volumes:
+  database_data:
+    driver: local
