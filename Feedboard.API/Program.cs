@@ -1,4 +1,5 @@
 ﻿using Feedboard.API.Helplers;
+using Feedboard.API.Middleware;
 using Feedboard.Core;
 using Feedboard.DAL;
 
@@ -29,8 +30,10 @@ var mapper = MapperConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddRouting(x => x.LowercaseUrls = true);
+
 //Add Services
-builder.Services.AddDAL(ConnectionStringHelper.GetDatabaseConnectionString());
+builder.Services.AddDAL(""); //ConnectionStringHelper.GetDatabaseConnectionString()
 builder.Services.AddCore();
 
 var app = builder.Build();
@@ -42,13 +45,15 @@ app.UseCors("AllowAllOrigins");
 // in production need to uncomment this "if"
 //if (app.Environment.IsDevelopment())
 //{
-app.UseSwagger();
-app.UseSwaggerUI();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 //}
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.MapControllers();
 
